@@ -13,7 +13,7 @@ namespace ListaTask.Infra.Mappings
             Property(x => x.DataFinalizacao).IsOptional();
             Property(x => x.Titulo).IsRequired().HasMaxLength(150);
             Property(x => x.Corpo).IsRequired().HasMaxLength(400);
-            Property(x => x.Situacao.ToString());
+            Property(x => x.Situacao).IsRequired();
         }
     }
 }

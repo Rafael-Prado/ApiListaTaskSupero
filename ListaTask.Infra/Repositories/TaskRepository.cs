@@ -1,4 +1,5 @@
 ﻿using ListaTask.Infra.Context;
+using ListaTask.Infra.Data;
 using ListTask.Domain.Entities;
 using ListTask.Domain.Repository.Interface;
 using System;
@@ -10,10 +11,12 @@ namespace ListaTask.Infra.Repositories
     public class TaskRepository : ITaskInterfaceRepository
     {
         private readonly ContextListaTask _context;
+        private readonly ListaTaskContext _taskContext;
 
-        public TaskRepository(ContextListaTask context)
+        public TaskRepository(ContextListaTask context, ListaTaskContext taskContext)
         {
             _context = context;
+            _taskContext = taskContext;
         }
 
         public IEnumerable<Task> GetTask()
@@ -23,6 +26,8 @@ namespace ListaTask.Infra.Repositories
 
         public Task GetTask(Guid id)
         {
+            _taskContext.BeginTransaction();
+
             return _context
                 .Task
                 .AsNoTracking()
@@ -31,7 +36,16 @@ namespace ListaTask.Infra.Repositories
 
         public void Save(Task task)
         {
-            _context.Task.Add(task);
+            if (task != null)
+            {
+                _taskContext.BeginTransaction();
+
+                _context.Task.Add(task);
+
+                _taskContext.Commit();
+            }           
+
+            _taskContext.Dispose();
         }
     }
 }
