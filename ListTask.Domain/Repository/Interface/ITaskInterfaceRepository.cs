@@ -8,6 +8,6 @@ namespace ListTask.Domain.Repository.Interface
     {
         void Save(Task task);
         IEnumerable<Task> GetTask();
-        Task GetTask(Guid id);
+        Task GetTaskId(Guid id);
     }
 }

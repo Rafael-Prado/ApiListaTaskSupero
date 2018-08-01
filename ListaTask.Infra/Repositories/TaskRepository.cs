@@ -21,10 +21,14 @@ namespace ListaTask.Infra.Repositories
 
         public IEnumerable<Task> GetTask()
         {
-            return null;
+            _taskContext.BeginTransaction();
+            return _context.Task
+                .AsNoTracking()
+                .OrderBy(x => x.DataCreate);
+
         }
 
-        public Task GetTask(Guid id)
+        public Task GetTaskId(Guid id)
         {
             _taskContext.BeginTransaction();
 
@@ -32,6 +36,8 @@ namespace ListaTask.Infra.Repositories
                 .Task
                 .AsNoTracking()
                 .FirstOrDefault(x => x.Id == id);
+
+            _taskContext.Dispose();
         }
 
         public void Save(Task task)

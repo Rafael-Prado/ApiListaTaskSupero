@@ -16,6 +16,18 @@ namespace ListaTask.Api.Service
             _taskInterfaceRepository = taskInterfaceRepository;
         }
 
+        public IEnumerable<Task> GetAll()
+        {
+            var tasks = _taskInterfaceRepository.GetTask();
+            return tasks;
+        }
+
+        public Task GetTaskId(Guid id)
+        {
+            var task = _taskInterfaceRepository.GetTaskId(id);
+            return task;
+        }
+
         public void save(Task task)
         {
             _taskInterfaceRepository.Save(task);

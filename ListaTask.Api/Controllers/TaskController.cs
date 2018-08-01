@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using ListaTask.Api.Service;
 using ListTask.Domain.Entities;
@@ -20,23 +19,35 @@ namespace ListaTask.Api.Controllers
             _taskService = taskService;
         }
 
-        // GET api/values
+        [HttpGet]
+        [Route("")]
         [SwaggerOperation("GetAll")]
-        public IEnumerable<string> Get()
+        public IHttpActionResult GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var tasks = _taskService.GetAll();
+            return Ok(tasks);
         }
 
-        // GET api/values/5
+        [HttpGet]
+        [Route("{id}")]
         [SwaggerOperation("GetById")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        public string Get(int id)
+        public IHttpActionResult GetTaskId(Guid id)
         {
-            return "value";
+            
+            if (id != null)
+            {
+               var task = _taskService.GetTaskId(id);
+                return Ok(task);
+            }
+
+            return NotFound();
+
         }
 
         // POST api/
+        [HttpPost]
         [Route("")]
         [SwaggerOperation("Create")]
         [SwaggerResponse(HttpStatusCode.Created)]
