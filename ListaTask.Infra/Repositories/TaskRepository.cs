@@ -44,14 +44,9 @@ namespace ListaTask.Infra.Repositories
         {
             if (task != null)
             {
-                _taskContext.BeginTransaction();
-
                 _context.Task.Add(task);
-
-                _taskContext.Commit();
             }           
 
-            _taskContext.Dispose();
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Web.Http;
 using ListaTask.Api.Service;
-using ListTask.Domain.Entities;
+using ListaTask.Infra.Transactions;
+using ListTask.Domain.Commands.Inputs;
 using Swashbuckle.Swagger.Annotations;
 
 namespace ListaTask.Api.Controllers
@@ -13,10 +12,12 @@ namespace ListaTask.Api.Controllers
     public class TaskController : ApiController
     {
         private readonly ITaskServece _taskService;
+        private readonly IUow _uow;
 
-        public TaskController(ITaskServece taskService)
+        public TaskController(ITaskServece taskService, IUow uow)
         {
             _taskService = taskService;
+            _uow = uow;
         }
 
         [HttpGet]
@@ -51,15 +52,19 @@ namespace ListaTask.Api.Controllers
         [Route("")]
         [SwaggerOperation("Create")]
         [SwaggerResponse(HttpStatusCode.Created)]
-        public IHttpActionResult SalveTask([FromBody] Task task)
+        public IHttpActionResult SalveTask([FromBody] CommandsTasks commands)
         {
              
 
-            if (task != null)
+            if (commands != null)
             {
-                _taskService.save(task);
-
-                return Ok();
+                var result = _taskService.save(commands);
+                _uow.Commit();
+                return Ok(new
+                {
+                    success = true,
+                    data = result
+                });
             }
 
             return NotFound();

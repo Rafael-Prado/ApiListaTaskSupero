@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ListTask.Domain.Entities
 {
     public class Task
     {
-        public Task(Guid id, string titulo, string corpo, string situacao, DateTime dataCreate, DateTime dataFinalizacao)
+        public Task(string titulo, string corpo, string situacao, DateTime? dataFinalizacao)
         {
             Id = Guid.NewGuid();
             Titulo = titulo;
@@ -23,7 +19,7 @@ namespace ListTask.Domain.Entities
         public string Corpo { get; private set; }
         public string Situacao { get; private set; }
         public DateTime DataCreate { get; private set; }
-        public DateTime DataFinalizacao { get; private set; }
+        public DateTime? DataFinalizacao { get; private set; }
 
 
 
