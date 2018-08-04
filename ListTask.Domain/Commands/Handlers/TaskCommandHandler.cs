@@ -22,7 +22,7 @@ namespace ListTask.Domain.Commands.Handlers
             if (command != null)
             {
                 var titulo = command.Titulo;
-                var corpo = command.Corpo;
+                var corpo = command.Tarefa;
                 var dataCreate = command.DataCreate;
                 var dataFim = command.DataFinalizacao;
                 var situacao = command.Situacao;    
@@ -31,7 +31,7 @@ namespace ListTask.Domain.Commands.Handlers
 
                 _taskInterfaceRepository.Save(task);
 
-                return new TaskCommandResult(task.Id, task.Titulo.ToString());
+                return new RegisterTaskCommand(task.Id, task.Titulo.ToString());
             }
 
             return null;

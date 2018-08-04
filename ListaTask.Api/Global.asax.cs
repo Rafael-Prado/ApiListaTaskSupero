@@ -9,6 +9,7 @@ using SimpleInjector;
 using SimpleInjector.Integration.WebApi;
 using SimpleInjector.Lifestyles;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace ListaTask.Api
 {
@@ -17,10 +18,11 @@ namespace ListaTask.Api
         protected void Application_Start()
         {
 
-            GlobalConfiguration.Configure(WebApiConfig.Register);        
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+            
 
 
-        var container = new Container();
+            var container = new Container();
 
         container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 

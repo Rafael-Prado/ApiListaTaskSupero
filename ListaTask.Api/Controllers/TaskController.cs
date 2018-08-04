@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using ListaTask.Api.Service;
 using ListaTask.Infra.Transactions;
 using ListTask.Domain.Commands.Inputs;
@@ -8,6 +9,7 @@ using Swashbuckle.Swagger.Annotations;
 
 namespace ListaTask.Api.Controllers
 {
+    
     [RoutePrefix("task/api")]
     public class TaskController : ApiController
     {
@@ -41,6 +43,24 @@ namespace ListaTask.Api.Controllers
             {
                var task = _taskService.GetTaskId(id);
                 return Ok(task);
+            }
+
+            return NotFound();
+
+        }
+
+        [HttpGet]
+        [Route("situacao/{situacao}")]
+        [SwaggerOperation("GetBySituacao")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.NotFound)]
+        public IHttpActionResult GetTaskSituacao(int situacao)
+        {
+
+            if (situacao != null)
+            {
+                var tasks = _taskService.GetTaskSituacao(situacao);
+                return Ok(tasks);
             }
 
             return NotFound();

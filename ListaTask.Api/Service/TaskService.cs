@@ -20,7 +20,7 @@ namespace ListaTask.Api.Service
             _handler = handler;
         }
 
-        public IEnumerable<Task> GetAll()
+        public IEnumerable<TaskCommandResult> GetAll()
         {
             var tasks = _taskInterfaceRepository.GetTask();
             return tasks;
@@ -30,6 +30,12 @@ namespace ListaTask.Api.Service
         {
             var task = _taskInterfaceRepository.GetTaskId(id);
             return task;
+        }
+
+        public IEnumerable<TaskCommandResult> GetTaskSituacao(int situacao)
+        {
+            var tasks = _taskInterfaceRepository.GetTaskSituacao(situacao);
+            return tasks;
         }
 
         public ICommandResult save(CommandsTasks commands)

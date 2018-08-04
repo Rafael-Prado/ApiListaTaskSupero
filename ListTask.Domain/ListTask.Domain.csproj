@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="Commands\Handlers\TaskCommandHandler.cs" />
     <Compile Include="Commands\Inputs\CommandsTasks.cs" />
+    <Compile Include="Commands\Outputs\RegisterTaskCommand.cs" />
     <Compile Include="Commands\Outputs\TaskCommandResult.cs" />
     <Compile Include="Entities\Task.cs" />
     <Compile Include="Enums\Situacao.cs" />

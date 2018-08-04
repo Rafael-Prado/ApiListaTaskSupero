@@ -1,9 +1,12 @@
-﻿using ListaTask.Infra.Context;
-using ListaTask.Infra.Data;
+﻿using Dapper;
+using ListaTask.Infra.Context;
+using ListaTask.Shared;
+using ListTask.Domain.Commands.Outputs;
 using ListTask.Domain.Entities;
 using ListTask.Domain.Repository.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace ListaTask.Infra.Repositories
@@ -11,33 +14,48 @@ namespace ListaTask.Infra.Repositories
     public class TaskRepository : ITaskInterfaceRepository
     {
         private readonly ContextListaTask _context;
-        private readonly ListaTaskContext _taskContext;
 
-        public TaskRepository(ContextListaTask context, ListaTaskContext taskContext)
+        public TaskRepository(ContextListaTask context)
         {
             _context = context;
-            _taskContext = taskContext;
         }
 
-        public IEnumerable<Task> GetTask()
+        public IEnumerable<TaskCommandResult> GetTask()
         {
-            _taskContext.BeginTransaction();
-            return _context.Task
-                .AsNoTracking()
-                .OrderBy(x => x.DataCreate);
+            var query = "SELECT  [Id],[Titulo],[Corpo],[Situacao],[DataCreate],[DataFinalizacao] FROM [supero].[dbo].[Task]";
+            using (var conn = new SqlConnection(Settings.ConnectionString))
+            {
+                conn.Open();
+                return conn
+                    .Query<TaskCommandResult>(query)
+                    .OrderBy(x => x.DataCreate);
+            }
 
         }
 
         public Task GetTaskId(Guid id)
         {
-            _taskContext.BeginTransaction();
+            
 
             return _context
                 .Task
                 .AsNoTracking()
                 .FirstOrDefault(x => x.Id == id);
 
-            _taskContext.Dispose();
+            
+        }
+
+        public IEnumerable<TaskCommandResult> GetTaskSituacao(int situacao)
+        {
+            var query = "SELECT  [Id],[Titulo],[Corpo],[Situacao],[DataCreate],[DataFinalizacao] FROM [supero].[dbo].[Task]";
+            using (var conn = new SqlConnection(Settings.ConnectionString))
+            {
+                conn.Open();
+                return conn
+                    .Query<TaskCommandResult>(query)
+                    .Where(x => x.Situacao == situacao.ToString())
+                    .OrderBy(x => x.DataCreate);
+            }
         }
 
         public void Save(Task task)
